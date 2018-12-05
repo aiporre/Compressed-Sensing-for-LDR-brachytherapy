@@ -1,0 +1,268 @@
+ %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% University/School Laboratory Report
+% LaTeX Template
+% Version 3.1 (25/3/14)
+%
+% This template has been downloaded from:
+% http://www.LaTeXTemplates.com
+%
+% Original author:
+% Linux and Unix Users Group at Virginia Tech Wiki 
+% (https://vtluug.org/wiki/Example_LaTeX_chem_lab_report)
+%
+% License:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass[12pt]{article}
+
+\usepackage[version=3]{mhchem} % Package for chemical equation typesetting
+\usepackage{siunitx} % Provides the \SI{}{} and \si{} command for typesetting SI units
+\usepackage{graphicx} % Required for the inclusion of images
+\usepackage{natbib} % Required to change bibliography style to APA
+\usepackage{amsmath} % Required for some math elements 
+\usepackage{amsthm}
+\usepackage{amsfonts}
+
+\setlength\parindent{0pt} % Removes all indentation from paragraphs
+
+\renewcommand{\labelenumi}{\alph{enumi}.} % Make numbering in the enumerate environment by letter rather than number (e.g. subsection 6)
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+%\usepackage{times} % Uncomment to use the Times New Roman font
+
+%----------------------------------------------------------------------------------------
+%	DOCUMENT INFORMATION
+%----------------------------------------------------------------------------------------
+
+\title{Compressed Sensing for LDR brachytherapy} % Title
+
+\author{Ariel Iporre} % Author name
+
+\date{\today} % Date for the report
+
+\begin{document}
+
+\maketitle % Insert the title, author and date
+
+\tableofcontents
+
+% If you wish to include an abstract, uncomment the lines below
+% \begin{abstract}
+% Abstract text
+% \end{abstract}
+
+%----------------------------------------------------------------------------------------
+%	subsection 1
+%----------------------------------------------------------------------------------------
+\section{sketch of content}
+the report should have the folling subsections:
+\begin{itemize}
+    \item Week 1: Literature: Dose model, scoring models: 4 page report
+    \item Week 2: Implementation AAPM TG-53 dose model; for given set of dose points: compute dose scoring matrix D
+    \item Wee 3: Formulate a linear programming model for dose optimization with dose constraints
+    \item Week 4: Implement Matching Pursuit Model for solving LDR-model.
+    \item Week 5: Evaluation on a set of test cases 
+    \item Week 6: report writing
+    \begin{itemize}
+        \item a.   	Introduction 1p
+        \item b.   	Background 1p
+        \item c.    State of the art of LDR brachytherapy inverse treatment planning 6p
+        \item d.   	Material and Methods 6p
+        \item e.   	Results 6p
+        \item f.    Discussion and conclusion 3p
+    \end{itemize}
+\end{itemize}
+the report is:
+    \begin{itemize}
+        \item ======> \textbf{a.   	Introduction 1p: }
+        
+        \item \textbf{1st idea}
+        \item why is LDR important better than HDR and other techniques. Why is promessing field of research. What are the problems with the current state of art (this is the same idea that is going to be in the state of art). 
+        \item \textbf{2d idea}
+        \item Gutier and Hesser proposed an very effienct algotih to solve the ITP. Here we propose a framework to use the optimization techniques. Also al API that uses a library of LDR and general Radiation teatment planning classes in MATLAB, for futher research in this field.
+        \item ========>>>>>> \textbf{b.   	Background 1p}
+        \item \textbf{1st idea}
+        \item What is compresssening? mathematical definition? mathematical propeperties? Meaning in LDR?
+        \item \textbf{2nd idea}
+        \item Describe the algorithms to solve the problem in terms of mathematicl defifionts and complexity analyis. Convergence and properties. 
+        \item =================>>>>>>>>> \textbf{c.    State of the art of LDR brachytherapy inverse treatment planning 6p} 
+        \item algorithms classic
+        \item cost functions
+    
+        \item d.   	Material and Methods 6p
+        \item e.   	Results 6p
+        \item f.    Discussion and conclusion 3p
+    \end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Introduction}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+After more than a century of development, brachytherapy consolidated its position as valid technique to treat cancerous tumors. In few words, brachytherapy is short distance treatment where radiative isotopes are placed near or in the affected tissue \cite{Dahiya:2006}.  Brachytherapy is well accepted among professionals in the are of cancer treatment as it is considered as an option of treatment along with widespread practices as prostatectomy. As a matter of fact, brachytherapy is considered to have equivalent or better results than ultimate conformal external bream radiotherapy approaches\cite{Tward2006}. In brachyterapy we are able to conform the irradiated area in a similar way as IMGT, while we can deliver a  large  dose  of  radiation  to  the  tumor  while  minimizing  exposure  to  surrounding  sensitive  normal  structures\cite{Devlin2016}. There is a work that compares the IMRT and brachytherapy outcomes \cite{tsubokura2018comparison} and states that.....??  I didn't read yet...:) . In this work we deal with an algorithm of optimization to work in such paradigm.
+
+Professional prefer external beam radiotherapy in cases with many focal regions better than brachytherapy \cite{Thomas20XX}, though brachytherapy is still being a better choose in local treatment; specially when there are very sensitive organs near to the tumor as in prostate, cervical or breast cancer\cite{cozzi2018advantages,kamrava2017american,kalaghchi2018high,rospond2018ruthenium}, though prostate cancer is the main preferred target\cite{zaorsky2017}. \cite{shen2012}.
+ In cases, of very bulky carcinomas, future studies are evaluating the optimal radiation dose, varying
+techniques with incorporation of brachytherapy, chemotherapy regimen, and
+sequencing of multimodality therapy. \cite{wong2008combined}. Techniques in brachytherapy varies in terms of type of implant, the duration of the treatment, radiative material of the seeds, geometry of the seeds and frequency of the treatment, a fairly compressed review on the state of the art can be found in \cite{dahiya2016,koukourakis2009}.% TODO: mabye a description of what dahiya and koukourakis
+\par
+%Two main \textbf{IDEA: brief state of  art of brachytherapy} 
+%\begin{itemize}
+%\item LDR is short energy
+%\item HDR is large energy and partial doses
+%\end{itemize}
+As brief state of art of brachyterapy (BT), we consider the two widely used radiation regimes: 
+\begin{itemize}
+\item LDR: low-dose-permanent implantation of radiative seeds. 
+\item HDR: high-dose-temporaty implantation of radiative seeds.
+\end{itemize}
+Recent studies point out the fact LDR-BT and HDR-BT are acceptable treatments alternatives for cancer treatment. HDR-BT typically present less acute irritative symptoms, in contrast to LDR-BT that involve less complicated logistics \cite{zaorsky2017}. However a systematic analysis of reports comparing HDR-BT and LDR-BT suggest similar outcomes \cite{zaorsky2017}. Despite the relevant outcomes obtained, the conformation of the treatment volume and all the previous analysis plays a major role in the effectiveness of the treatment. In this way, computer-based inverse treatment planning (ITP) used to optimize the treatment deals with the problem of cover the tumor-region with at least the prescribed dose.\par
+%%
+In this project we aim to implement models and solvers proposed in \cite{phdthesis}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{State of the art of LDR brachytherapy inverse treatment planning}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Graphical optimization}
+Doctors spend time with drag and drop tools like...\par
+Comparision: \cite{kannan2015comparison}: conclusion...There was a significant improvement in the HRCTV coverage, mean V100 of 87.75\% and 82.37\% (p = 0.001) and conformity index 0.67 and 0.6 (p = 0.007) for plans generated using IPSA and manual optimisation, respectively. Homogeneity index and dose to the OARs remained similar between the two groups.
+\subsubsection{Gradient based methods}
+idea1: one short sentence of description\par
+%%
+\cite{roy1991ct}:A computerized planning procedure has been developed for CT-guided transperineal prostate implants. The segment for custom planning of perineal needle orientations allows placement of 1-125 seeds in the entire prostate gland while avoiding the pubic bones. Least-squares optimization (LSO) is used to obtain the seed-loading pattern along the needles. The optimized seed distribution produces a better fit between treatment and target volumes than that obtained from our previous manual technique. Also, the present semi-automatic technique reduces planning time by about a factor of 10 compared to that of the manual approach.\par
+%%
+\cite{bauer1988computerized}: it is gradient based method that 1. calculated gradient of DBOP and computes the lenght of the step for each iteration via a linear search. It is an adatption of Fewell algorith... It is pointed out that:\par
+\begin{quote}
+"When applying this procedure care must be taken to ensure that only positive activity values are used. This is achieved by multiplying the objective function by a pen- alty function which for negative activity values rapidly becomes infinity. The minimizing procedure provides, after only a few iteration steps, an optimum seed config- uration without, however, taking account of the activities actually available. Therefore, this first optimization is fol- lowed by the selection of the most appropriate seed ac- tivities from a data base. Optimization is then repeated allowing the variation of the catheter position only"
+\end{quote}
+\cite{yao2014optimization}: as an example in HDR they still using gradient decent methods. Optimization for high-dose-rate brachytherapy of cervical cancer with adaptive simulated annealing and gradient descent.
+\subsection{Genetic algorithms}
+\subsection{Simulated Annealing}
+\subsection{Mixed Integer Linear Problem}
+\subsection{Greedy Heuristics}
+\subsection{Christian methods...??}
+\section{Background}
+\subsection{Compressed Sensing}
+In this section we want to define in more detail what is compressed sensing by defining it in the first place, defining the complexity and the algorithms of solution.\par
+Idea0: 
+In general terms compressed sensing is a signal processing technique used to reconstruct signal from an sparse representation i.e. minimizing the number of elements in the composition. This yields into a compressed version of the information, meaning that the new representation contains many zero components. In compressed sensing the signal is decomposed into a sparse representation that represent a linear space of linear independent vectors that should contain pieces of all the components of information of the original signal, from this point the compressed sensing algorithms will solve the problem as undetermined problem i.e. more variables than samples. In this section we discuss this topic in more detail on regard of the optimization of a LDR treatment scheme. \par
+Idea1: definition of compressed sensing:\par
+We may understand compressed sensing as an optimization problem in where we select less components as possible from a vector basis of representation, like the wavelet or cosine Fourier decomposition, and construct a compressed or reduced version of the signal that can be later recovered by the inverse transformation. \par 
+However we need to define first want we mean by sparse representation.
+\theoremstyle{definition}
+\begin{definition}
+    Given a measurement vector $y\in\mathbb{R}^m$ and signal vector $x \in \mathbb{R}^n$ and a linear model of measurement $A \in \mathbb{R}^{m\times n}$ the Compressed sensing problem is to find:
+    \begin{enumerate}
+        \item find $\hat{x} \in \mathbb{R}^c$ sparse representation of the model s.t. $x = S \hat{x}$ where S is a sparse linear space of the $\hat{A} =  A*S$ is the sparse measuremnt model. 
+        \item and optimize the sparse selection of components of $\hat{x}$ $\rightarrow$ min $|\hat{x}|_0$.
+    \end{enumerate}
+\end{definition}
+Idea2: what is sparcity?
+Sparcity comes from the term of compressibility, that refers to the property of a signal $x$ to be represented as a $\hat{x}$ with $\text{supp}{x}~|x|_0$ where the support vector of $\hat{x}$ is at most $s$ nonzero entries, this representation is denoted as s-sparse representation of $x$. The search of such space of representation is not allways possible in the sence it is a very strong constrain. In practice, the vectors of representations aim to accomplish certain compressibility given by the score \cite{foucart2013mathematical} defined as s-sparse approximation
+\begin{definition}
+For a $p>0$ the $\ell-error$ of the best s-term approximation to a vector $x\in\mathbb{R}^N$ is defined as:
+\begin{equation}
+    \sigma_s(x)_p := \inf{|x-z|_p, z \text{ is the $s$-sparse representation}}
+\end{equation}
+\end{definition}
+This last definition implies that there is possible to construct a non-convex ball that contains $x$ around $z$ s-sparse solution. It is also possible to demonstrate that the approximation of a $q$-compress representation is lower bound for the approximation of a $p$-compress representation, which stems into the conclusion that the CS problem can be relaxed enclosing the sparse solution into a $\ell_p$ ball arbitrary smooth.\par
+%% 
+Idea3: complexity and determination of the s-sparse solution:
+%%
+In general the CS problem can be described as finding the sparse solution from an under-determinate linear measurement models
+\begin{definition} [CS-Problem]
+For $x\in\mathbb{R}^N$ s-sparse signal, a linear model $A\in\mathbb{R}^{m\times N}$. The optimization of the CS-problem is defined as: $\min{|x|_0}$ s.t. $Ax=y$ 
+\end{definition}
+This solution is unique for $2s$ measurement, though the $rank(A)<N$. However, this is only for an ideal case, in general for an stable solution the number of measurements requires $m \sim log(N/s)$.\par
+Assuming we know the sparsity of the solution the na\"ive solution would be just find $A_{s}$ partitions of the model but this implicates the construction of $\binom{N}{s}$ linear systems of equation, that make the solution of the CS an NP-hard problem, in the sense that the complexity grows exponentially with the number of dimension of the signal.
+\subsection{LDR treatment planning problem formulation}
+idea 1:  general statement and physical explanation:
+As it has been mentioned in the LDR modality of brachytherapy the aim is to place radioactive material enclosed in metalic capsules in needles that penetrates into the treated region i.e. PTV \cite{defintion of ptv}. This problem can be solved from the perspective of Compressed sensing in the way we want to reduce or optimize the number of seeds implanted in patient.\par
+%%
+idea 2: statement of the model
+%%
+In terms of the formulations made in the previous section that is:
+\begin{definition}
+Given a treatment planning $y\in\mathbb{R}^m$ and a $s$-sparse solution $x\in\mathbb{R}^N$ of N dwellpoints, the LDR optimization problem is defined as: 
+\begin{equation}
+    \min_{x\in\mathbb{R}^N} |x|_0 \text{   such that   } Dx<y
+\end{equation}
+\end{definition}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Methods and Materials}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+The aim is to validate the models created and the algorithms implemented. how? For the models
+\begin{itemize}
+    \item take values of the paper and compare the errors of the table against the values obtained in our model for a given Kerma Strengt.
+    \item Second approach if time (very likely no!) to simulate using brachy emg library to simulate a seed and compare points on a grid.
+\end{itemize}
+In order to validate the framework and the models are used correcly we implemented LOMA and the LSUP on data of (20) patients and compare against orignal report. The results should be similar? how to measure how much similar...answer it is just compare errors and final values.\par
+\subsection{Data and prescriptions}
+How many patient, large tumors, number of dose points and seed positions. Parameters for LOMA: number of seeed, resolution, parameter for the bounds...\par
+We use dicom files containing:
+\begin{itemize}
+    \item CT image?
+    \item max dose?
+    \item min dose?
+\end{itemize}
+I don't know how my data is.. I have to guess it is the same as christians so I don't need to do nothing more that refer to disertation.\par
+The dosimetric criterias takes into consideration a 3mm around the prostate that is used to cover the CTV based on the recommentadion [TG143] which equal to the PTV since cover the systematic error and them motion volume. we place the table here: the prescribed dose varies between 120 and 140Gy, for the seed Amer- sham EchoSeed 6733 with a $S_k$ of $0.75 [U]$ this prescription based on the TG143 for Iodine 125 seeds.
+\begin{center}
+\begin{tabular}{ |c|c|c| } 
+ \hline
+ organ & criteria & constrain(\%)\\  \hline 
+ Protate & V100  &  $>95$\\ 
+ Protate & V150  &  $<50$\\ \hline
+ Urethra & UD10 & $<150$ \\ 
+ Urethra & UD30 & $<130$ \\ \hline
+ Rectum & RD0.1cc & $<150$ \\ 
+ Rectum & RD2.1cc & $<100$ \\ 
+ \hline
+\end{tabular}
+\end{center}
+\subsubsection{Dose points}
+The VOIs are sam- pled from a uniform grid with a spacing of 2.5 mm. In addition, the contours are sampled at a resolution of 2mm. With those assumptions, the number of dose points is between 5286 and 7769.\par
+For dwell-positions, the set of available needles is sampled with a resolution of 4.5mm for LDR and 2.5mm for HDR\par
+This condition won't be fulfilled: An additional margin of 2.0mm is sub- tracted from the surface in LDR in order to ensure that the seeds are inside the prostate capsule.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+Organ & min Dose(\%) & Weight & max Dose (\%) & Weight \\ 
+\hline
+PTV & 100 & 100 & 150 (\%) & 10 \\
+Urethra & -  & - & 67 (\%) & 5 \\
+Rectum & - & - & 50 (\%) & 5 \\
+\hline
+\end{tabular}
+\end{center}
+We repoduce the algorithm comparicion by calculating, as in [Dissertation] 
+\begin{quote}
+    The objective function value of the solution Q(x), the runtime t[s], the number of dwell-position #DP, EUD, and COIN are used for comparison of the algorithms. For each parameter, mean value μ, standard de- viation σ, minimum min, and maximum max are calculated from the set of all patients.
+\end{quote}
+Also the values of V100 V150 UD10 UD30 RD0.1cc and RD2.1cc.\par
+the dose evaluation will run in an script all 10 patiens and will produce an struct with the data of every run. We also add the flag Storage to do that and produce images in .fig and the .mat files of a struct containing the session and the dosimeter criteria. 
+
+
+%----------------------------------------------------------------------------------------
+%	BIBLIOGRAPHY
+%----------------------------------------------------------------------------------------
+
+\bibliographystyle{plain}
+
+\bibliography{sample}
+
+%----------------------------------------------------------------------------------------
+
+
+\end{document}
